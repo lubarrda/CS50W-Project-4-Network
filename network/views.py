@@ -60,10 +60,23 @@ def profile(request, user_id):
     })
 
 def follow(request):
-    return
+    user_follow = request.POST['userfollow']
+    current_user = User.objects.get(pk=request.user.id)
+    user_follow_data = User.objects.get(username=user_follow)
+    f = Follow(user=current_user, user_followed=user_follow_data)
+    f.save()
+    user_id = user_follow_data.id
+    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': user_id}))
+
 
 def unfollow(request):
-    return
+    user_follow = request.POST['userfollow']
+    current_user = User.objects.get(pk=request.user.id)
+    user_follow_data = User.objects.get(username=user_follow)
+    f= Follow.objects.get(user=current_user, user_followed=user_follow_data)
+    f.delete()
+    user_id = user_follow_data.id
+    return HttpResponseRedirect(reverse('profile', kwargs={'user_id': user_id}))
 
 def login_view(request):
     if request.method == "POST":
