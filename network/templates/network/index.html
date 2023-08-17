@@ -32,15 +32,13 @@
         {% endfor %}
     </div>
     
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
+    <nav aria-label="Page navigation example" class="text-center">
+        {% if page_posted.has_next %}
+            <a class="page-link central-btn" href="?page={{ page_posted.next_page_number }}">Next</a>
+        {% elif not page_posted.has_next and page_posted.number != 1 %}
+            <a class="page-link central-btn" href="?page={{ page_posted.previous_page_number }}">Back</a>
+        {% endif %}
+    </nav>
 
 </div>
 {% endblock %}

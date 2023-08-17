@@ -5,7 +5,7 @@
     --btn-bg-color: #007BFF;
     --btn-hover-color: #0056b3;
     --shadow-color: rgba(0, 0, 0, 0.1);
-    --divider-color: rgba(255, 255, 255, 0.2); /* Nuevo: para líneas divisorias */
+    --divider-color: rgba(255, 255, 255, 0.2); 
 }
 
 body {
@@ -26,13 +26,13 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px var(--shadow-color);
     background-color: var(--bg-color);
-    padding: 15px; /* Nuevo: para dar espacio dentro del cuadro */
+    padding: 15px; 
 }
 
 .newPost h2, .newPost .form-control {
     margin-top: 0;
     resize: vertical;
-    margin-bottom: 10px; /* Nuevo: para separación */
+    margin-bottom: 10px; 
 }
 
 .btn-primary {
@@ -40,7 +40,7 @@ body {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px; /* Nuevo: para separación del botón */
+    margin-top: 10px; 
 }
 
 .btn-primary:hover {
@@ -48,32 +48,53 @@ body {
 }
 
 .allPost {
-    margin-top: 30px; /* Aumento del espacio superior para respirar */
+    margin-top: 30px; 
 }
 
 .post {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background-color: var(--bg-color);
-    padding: 20px; /* Aumento del padding para más espacio */
-    margin-bottom: 25px; /* Aumento del margen inferior para separar los posts */
+    padding: 20px; 
+    margin-bottom: 25px; 
     box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .username {
     font-weight: bold;
     margin-bottom: 5px;
-    border-bottom: 1px solid var(--divider-color); /* Línea divisoria */
-    padding-bottom: 10px; /* Espaciado bajo el nombre de usuario */
+    border-bottom: 1px solid var(--divider-color);
+    padding-bottom: 10px; 
 }
 
 .content {
     font-size: 16px;
-    margin-bottom: 15px; /* Espaciado aumentado para separar del date */
+    margin-bottom: 15px; 
     color: var(--text-color);
 }
 
 .date {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.6);
+}
+
+
+
+.central-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.central-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.central-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
 }

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 
 def index(request):
@@ -28,6 +28,42 @@ def new_post(request):
         post.save()
         return HttpResponseRedirect(reverse(index))
 
+def profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    all_posts = Post.objects.filter(user=user).order_by("id").reverse()
+
+    following = Follow.objects.filter(user=user)
+    followed = Follow.objects.filter(user_followed=user)
+
+    try:
+        check_follow = followed.filter(user=User.objects.get(pk=request.user.id))
+        if len(check_follow) != 0:
+            is_following = True
+        else:
+            is_following = False
+    except:
+        is_following = False
+
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    page_posted = paginator.get_page(page_number)
+
+    return render(request, "network/profile.html", {
+        "all_posts" : all_posts,
+        "page_posted": page_posted,
+        "username":user.username,
+        "following" : following,
+        "followed" : followed,
+        "is_following" : is_following,
+        "user_profile" : user
+
+    })
+
+def follow(request):
+    return
+
+def unfollow(request):
+    return
 
 def login_view(request):
     if request.method == "POST":
