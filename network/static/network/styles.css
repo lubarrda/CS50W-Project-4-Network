@@ -1,0 +1,79 @@
+:root {
+    --bg-color: #181818;
+    --text-color: #FFF;
+    --border-color: #333;
+    --btn-bg-color: #007BFF;
+    --btn-hover-color: #0056b3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --divider-color: rgba(255, 255, 255, 0.2); /* Nuevo: para líneas divisorias */
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.newPost {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    background-color: var(--bg-color);
+    padding: 15px; /* Nuevo: para dar espacio dentro del cuadro */
+}
+
+.newPost h2, .newPost .form-control {
+    margin-top: 0;
+    resize: vertical;
+    margin-bottom: 10px; /* Nuevo: para separación */
+}
+
+.btn-primary {
+    background-color: var(--btn-bg-color);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Nuevo: para separación del botón */
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover-color);
+}
+
+.allPost {
+    margin-top: 30px; /* Aumento del espacio superior para respirar */
+}
+
+.post {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    padding: 20px; /* Aumento del padding para más espacio */
+    margin-bottom: 25px; /* Aumento del margen inferior para separar los posts */
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--divider-color); /* Línea divisoria */
+    padding-bottom: 10px; /* Espaciado bajo el nombre de usuario */
+}
+
+.content {
+    font-size: 16px;
+    margin-bottom: 15px; /* Espaciado aumentado para separar del date */
+    color: var(--text-color);
+}
+
+.date {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}

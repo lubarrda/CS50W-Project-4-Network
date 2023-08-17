@@ -1,5 +1,46 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+<div class="container mt-4">
+    <h1>All Posts</h1>
+
+    {% if user.is_authenticated %}
+    <div class="newPost card mt-3">
+        <div class="card-header">
+            <h2>New Post</h2>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'new_post' %} " method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" class="form-control" rows="4"
+                        placeholder="Something to share...?"></textarea>
+                </div>
+                <input type="submit" value="Post" class="btn btn-primary" />
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="allPost">
+        {% for post in page_posted %}
+            <div class="post mx-5 my-3">
+                <h5 class="username mb-1">@{{ post.user }}</h5>
+                <h6 class="content mb-1">{{ post.content }}</h6>
+                <p class="date mb-0">{{ post.date }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+
+</div>
 {% endblock %}
