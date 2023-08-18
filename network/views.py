@@ -129,7 +129,6 @@ def register(request):
         username = request.POST["username"]
         email = request.POST["email"]
 
-        # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -137,7 +136,6 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()

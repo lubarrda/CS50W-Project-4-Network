@@ -13,6 +13,7 @@ urlpatterns = [
     path("unfollow", views.unfollow, name="unfollow"),
     path("follow", views.follow, name="follow"),
     path("following", views.following, name="following"),
+    
 
 
     
