@@ -59,6 +59,7 @@ def profile(request, user_id):
 
     })
 
+
 def follow(request):
     user_follow = request.POST['userfollow']
     current_user = User.objects.get(pk=request.user.id)
@@ -77,6 +78,26 @@ def unfollow(request):
     f.delete()
     user_id = user_follow_data.id
     return HttpResponseRedirect(reverse('profile', kwargs={'user_id': user_id}))
+
+def following (request):
+    current_user = User.objects.get(pk=request.user.id)
+    user_people = Follow.objects.filter(user=current_user)
+    all_posts = Post.objects.all().order_by('id').reverse()
+
+    people_posts = []
+
+    for post in all_posts:
+        for person in user_people:
+            if person.user_followed == post.user:
+                people_posts.append(post)
+
+    paginator = Paginator(people_posts, 10)
+    page_number = request.GET.get('page')
+    page_posted = paginator.get_page(page_number)
+
+    return render(request, "network/following.html", {
+        "page_posted": page_posted
+    })
 
 def login_view(request):
     if request.method == "POST":
