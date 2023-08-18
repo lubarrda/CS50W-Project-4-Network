@@ -18,17 +18,30 @@
         }
 
         function submitrequest(id) {
-            const textareaValue = document.getElementById(`textarea_${id}`).value
+            const textareaValue = document.getElementById(`textarea_${id}`).value;
             fetch(`/edit/${id}`, {
                 method: "POST",
-                headers: { "Content-type": "application/json", "X-CSRFToken" : getCookie("csrftoken")},
-                body: JSON.stringify ({
+                headers: { "Content-type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
+                body: JSON.stringify({
                     content: textareaValue
                 })
             })
-            .then(response => response.json())
-            .then(result =>
-                console.log(result))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    // updating
+                    document.getElementById(`content_${id}`).innerText = result.data;
+
+                    // hidding modal.
+                    $(`#modal_edit_post_${id}`).modal('hide');
+                })
+                .catch(error => {
+                    console.log("There was a problem with the fetch operation:", error.message);
+                });
         }
     </script>
 
