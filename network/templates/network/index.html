@@ -42,7 +42,60 @@
                 .catch(error => {
                     console.log("There was a problem with the fetch operation:", error.message);
                 });
+        
         }
+        
+function like_trigger(id, who_liked) {
+    const btn = document.getElementById(`${id}`);
+    
+    btn.disabled = true;
+
+    let endpoint = '';
+    let newBtnContent = '';
+    let newBtnClass = '';
+    let oldBtnClass = '';
+
+    if (who_liked.indexOf(id) >= 0) { 
+        endpoint = `/dislike/${id}`;
+        newBtnContent = '<i class="fa fa-thumbs-up"></i> Like';
+        newBtnClass = 'btn-up';
+        oldBtnClass = 'btn-down';
+    } else { 
+        endpoint = `/like/${id}`;
+        newBtnContent = '<i class="fa fa-thumbs-down"></i> Dislike';
+        newBtnClass = 'btn-down';
+        oldBtnClass = 'btn-up';
+    }
+
+    fetch(endpoint)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(result => {
+            btn.classList.remove(oldBtnClass);
+            btn.classList.add(newBtnClass);
+            btn.innerHTML = newBtnContent;
+
+            if (newBtnClass === 'btn-down') {
+                who_liked.push(id);
+            } else {
+                const index = who_liked.indexOf(id);
+                if (index > -1) {
+                    who_liked.splice(index, 1);
+                }
+            }
+
+            btn.disabled = false;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            btn.disabled = false;
+        });
+}
+
     </script>
 
 <div class="container mt-4">
@@ -96,9 +149,14 @@
                           </div>
                         </div>
                       </div>
+                    {% else %}
+                        {% if post.id in who_liked %}
+                        <button class="btn btn-down" onclick="like_trigger({{ post.id}}, {{who_liked}})" id="{{ post.id }}"><i class="fa fa-thumbs-down"></i> Dislike</button>
+                        {% else %}
+                        <button class="btn btn-up" onclick="like_trigger({{ post.id}}, {{who_liked}})" id="{{ post.id }}"><i class="fa fa-thumbs-up"></i> Like</button>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-
             </div>
         {% endfor %}
     </div>

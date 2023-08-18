@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 import json
 
-from .models import User, Post, Follow
+from .models import User, Post, Follow, Like
 
 
 def index(request):
@@ -15,10 +15,22 @@ def index(request):
     paginator = Paginator(all_posts, 10)
     page_number = request.GET.get('page')
     page_posted = paginator.get_page(page_number)
+    
+    all_likes = Like.objects.all()
+
+    who_liked = []
+    try:
+        for like in all_likes:
+            if like.user.id == request.user.id:
+                who_liked.append(like.post.id)
+    except: 
+        who_liked = []
+
 
     return render(request, "network/index.html", {
         "all_posts" : all_posts,
-        "page_posted": page_posted
+        "page_posted": page_posted,
+        "who_liked" : who_liked
     })
 
 def login_view(request):
@@ -156,3 +168,19 @@ def edit (request, post_id):
         edit_post.content = data["content"]
         edit_post.save()
         return JsonResponse({"message" :"Chage done", "data": data["content"]})
+
+def dislike(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.user.id)
+    like = Like.objects.filter(user=user, post=post)
+    like.delete()
+    return JsonResponse({"message" :"Disliked!"})
+
+def like(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.user.id)
+    liking = Like(user=user, post=post)
+    liking.save()
+    return JsonResponse({"message" :"Liked!"})
+
+

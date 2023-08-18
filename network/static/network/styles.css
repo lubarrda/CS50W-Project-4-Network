@@ -125,3 +125,32 @@ body {
     border: 3px solid red;
 
 }
+
+.btn-up, .btn-down {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 22px;
+    padding: 5px 15px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, border 0.2s ease;
+}
+
+.btn-up:hover, .btn-down:hover {
+    transform: scale(1.05); /* Efecto de crecimiento al pasar el mouse */
+    background-color: rgba(255, 255, 255, 0.05); /* Un ligero resaltado al pasar el mouse */
+}
+
+.btn-up .fa, .btn-down .fa {
+    margin-right: 0.5rem; /* Espacio entre el ícono y el texto */
+}
+
+.btn-up .fa {
+    color: #34c3ff; /* Un azul claro para "like" */
+}
+
+.btn-down .fa {
+    color: #ff4b5e; /* Un rojo claro para "dislike" */
+}
