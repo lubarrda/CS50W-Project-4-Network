@@ -157,8 +157,20 @@ def following (request):
     page_number = request.GET.get('page')
     page_posted = paginator.get_page(page_number)
 
+    all_likes = Like.objects.all()
+
+    who_liked = []
+    try:
+        for like in all_likes:
+            if like.user.id == request.user.id:
+                who_liked.append(like.post.id)
+    except: 
+        who_liked = []
+
     return render(request, "network/following.html", {
-        "page_posted": page_posted
+        "page_posted": page_posted,
+        "who_liked" : who_liked
+
     })
 
 def edit (request, post_id):

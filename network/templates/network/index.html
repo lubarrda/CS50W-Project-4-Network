@@ -1,103 +1,6 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <script>
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        function submitrequest(id) {
-            const textareaValue = document.getElementById(`textarea_${id}`).value;
-            fetch(`/edit/${id}`, {
-                method: "POST",
-                headers: { "Content-type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
-                body: JSON.stringify({
-                    content: textareaValue
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    // updating
-                    document.getElementById(`content_${id}`).innerText = result.data;
-
-                    // hidding modal.
-                    $(`#modal_edit_post_${id}`).modal('hide');
-                })
-                .catch(error => {
-                    console.log("There was a problem with the fetch operation:", error.message);
-                });
-        
-        }
-        
-function like_trigger(id, who_liked) {
-    const btn = document.getElementById(`${id}`);
-    
-    btn.disabled = true;
-
-    let endpoint = '';
-    let newBtnContent = '';
-    let newBtnClass = '';
-    let oldBtnClass = '';
-
-    if (who_liked.indexOf(id) >= 0) { 
-        endpoint = `/dislike/${id}`;
-        newBtnContent = '<i class="fa fa-thumbs-up"></i> Like';
-        newBtnClass = 'btn-up';
-        oldBtnClass = 'btn-down';
-    } else { 
-        endpoint = `/like/${id}`;
-        newBtnContent = '<i class="fa fa-thumbs-down"></i> Dislike';
-        newBtnClass = 'btn-down';
-        oldBtnClass = 'btn-up';
-    }
-
-    fetch(endpoint)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(result => {
-            btn.classList.remove(oldBtnClass);
-            btn.classList.add(newBtnClass);
-            btn.innerHTML = newBtnContent;
-
-            if (newBtnClass === 'btn-down') {
-                who_liked.push(id);
-            } else {
-                const index = who_liked.indexOf(id);
-                if (index > -1) {
-                    who_liked.splice(index, 1);
-                }
-            }
-
-            btn.disabled = false;
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            btn.disabled = false;
-        });
-}
-
-    </script>
-
 <div class="container mt-4">
     <h1>All Posts</h1>
 
@@ -107,11 +10,10 @@ function like_trigger(id, who_liked) {
             <h2>New Post</h2>
         </div>
         <div class="card-body">
-            <form action="{% url 'new_post' %} " method="post">
+            <form action="{% url 'new_post' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <textarea name="content" class="form-control" rows="4"
-                        placeholder="Something to share...?"></textarea>
+                    <textarea name="content" class="form-control" rows="4" placeholder="Something to share...?"></textarea>
                 </div>
                 <input type="submit" value="Post" class="btn btn-primary" />
             </form>
@@ -122,7 +24,7 @@ function like_trigger(id, who_liked) {
     <div class="allPost">
         {% for post in page_posted %}
             <div class="post mx-5 my-3">
-                <h5 class="username mb-1">@{{ post.user }}</h5>
+                <h5 class="username mb-1"><a href="{% url 'profile' user_id=post.user.id %}">@{{ post.user }}</a></h5>
                 <h6 class="content" id="content_{{ post.id }}" mb-1">{{ post.content }}</h6>
                 <p class="date mb-0">{{ post.date }}</p>
                 {% if user.is_authenticated %}
@@ -143,7 +45,7 @@ function like_trigger(id, who_liked) {
                                 <textarea rows="5" id="textarea_{{ post.id }}" class="form-control" name="content">{{ post.content}}</textarea>
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-primary" onclick="submitrequest( {{ post.id }} )">Save changes</button>
+                              <button type="button" class="btn btn-primary" onclick="submitrequest( {{ post.id }} )">Update post</button>
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                           </div>
