@@ -17,4 +17,5 @@ urlpatterns = [
     path("dislike/<int:post_id>", views.dislike, name="dislike"),
     path("like/<int:post_id>", views.like, name="like"),
     
+    
 ]

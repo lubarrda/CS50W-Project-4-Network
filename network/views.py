@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 import json
+from django.contrib.auth.decorators import login_required
+
 
 from .models import User, Post, Follow, Like
 
@@ -12,7 +14,7 @@ from .models import User, Post, Follow, Like
 def index(request):
     all_posts = Post.objects.all().order_by("id").reverse()
 
-    paginator = Paginator(all_posts, 10)
+    paginator = Paginator(all_posts, 3)
     page_number = request.GET.get('page')
     page_posted = paginator.get_page(page_number)
     
@@ -106,9 +108,19 @@ def profile(request, user_id):
     except:
         is_following = False
 
-    paginator = Paginator(all_posts, 10)
+    paginator = Paginator(all_posts, 3)
     page_number = request.GET.get('page')
     page_posted = paginator.get_page(page_number)
+
+    all_likes = Like.objects.all()
+
+    who_liked = []
+    try:
+        for like in all_likes:
+            if like.user.id == request.user.id:
+                who_liked.append(like.post.id)
+    except: 
+        who_liked = []
 
     return render(request, "network/profile.html", {
         "all_posts" : all_posts,
@@ -117,8 +129,8 @@ def profile(request, user_id):
         "following" : following,
         "followed" : followed,
         "is_following" : is_following,
-        "user_profile" : user
-
+        "user_profile" : user,
+        "who_liked" : who_liked
     })
 
 
@@ -153,7 +165,7 @@ def following (request):
             if person.user_followed == post.user:
                 people_posts.append(post)
 
-    paginator = Paginator(people_posts, 10)
+    paginator = Paginator(people_posts, 3)
     page_number = request.GET.get('page')
     page_posted = paginator.get_page(page_number)
 
@@ -194,5 +206,3 @@ def like(request, post_id):
     liking = Like(user=user, post=post)
     liking.save()
     return JsonResponse({"message" :"Liked!"})
-
-
