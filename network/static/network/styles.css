@@ -224,8 +224,32 @@ body {
     box-shadow: none;
 }
 
+.likes-count {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 5px 15px;
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 500;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+}
 
+.likes-count:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
+.likes-count:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.2);
+}
 
+.likes-count .fas.fa-heart {
+    color: #ff4b5e; /* Un color rojo suave para el corazón */
+    margin-right: 8px; /* Espaciado entre el ícono y el número */
+}
 
+.likes-number {
+    color: var(--text-color);
+    font-weight: 600;
+}
 

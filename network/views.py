@@ -193,16 +193,20 @@ def edit (request, post_id):
         edit_post.save()
         return JsonResponse({"message" :"Chage done", "data": data["content"]})
 
-def dislike(request, post_id):
-    post = Post.objects.get(pk=post_id)
-    user = User.objects.get(pk=request.user.id)
-    like = Like.objects.filter(user=user, post=post)
-    like.delete()
-    return JsonResponse({"message" :"Disliked!"})
 
-def like(request, post_id):
+def toggle_like(request, post_id):
     post = Post.objects.get(pk=post_id)
     user = User.objects.get(pk=request.user.id)
-    liking = Like(user=user, post=post)
-    liking.save()
-    return JsonResponse({"message" :"Liked!"})
+    like_exists = Like.objects.filter(user=user, post=post).exists()
+
+    if like_exists:
+        Like.objects.filter(user=user, post=post).delete()
+        total_likes = post.post_like.count()
+        return JsonResponse({"message": "Disliked!", "total_likes": total_likes, "liked": False})
+    
+    else:
+        new_like = Like(user=user, post=post)
+        new_like.save()
+        total_likes = post.post_like.count()
+        return JsonResponse({"message": "Liked!", "total_likes": total_likes, "liked": True})
+

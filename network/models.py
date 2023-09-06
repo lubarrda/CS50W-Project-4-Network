@@ -10,6 +10,9 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
     date = models.DateTimeField(auto_now_add=True)
 
+    def total_likes(self):
+        return self.post_like.count()
+
     def __str__(self):
         return f"Post {self.id} made by {self.user} on {self.date.strftime('%d %b, %Y, %I:%M:%S %p').lower()}"
 

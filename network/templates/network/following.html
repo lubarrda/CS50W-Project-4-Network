@@ -1,0 +1,35 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Following</h1>
+
+    <div class="allPost">
+        {% for post in page_posted %}
+            <div class="post mx-5 my-3">
+                <h5 class="username mb-1"><a href="{% url 'profile' user_id=post.user.id %}">@{{ post.user }}</a></h5>
+                <h6 class="content" id="content_{{ post.id }}" mb-1">{{ post.content }}</h6>
+                <p class="date mb-0">{{ post.date }}</p>
+                <p class="likes-count mb-0"><i class="fas fa-heart"></i> <span id="like-count-{{ post.id }}" class="likes-number"> {{ post.total_likes }}</span> Likes</p>
+                
+                {% if user.is_authenticated %}
+                    {% if post.id in who_liked %}
+                    <button class="btn btn-down" onclick="like_trigger({{ post.id}}, {{who_liked}})" id="{{ post.id }}"><i class="fa fa-thumbs-down"></i> Dislike</button>
+                    {% else %}
+                    <button class="btn btn-up" onclick="like_trigger({{ post.id}}, {{who_liked}})" id="{{ post.id }}"><i class="fa fa-thumbs-up"></i> Like</button>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <nav aria-label="Page navigation " class="text-center">
+        {% if page_posted.has_next %}
+            <a class="page-link central-btn" href="?page={{ page_posted.next_page_number }}">Next</a>
+        {% elif not page_posted.has_next and page_posted.number != 1 %}
+            <a class="page-link central-btn" href="?page={{ page_posted.previous_page_number }}">Back</a>
+        {% endif %}
+    </nav>
+
+</div>
+{% endblock %}
